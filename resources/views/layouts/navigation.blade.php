@@ -33,7 +33,6 @@
                         <a class="nav-link" href="{{ 'registration' }}">Регистрация</a>
                     </li>
                 @endif
-
             </ul>
         </div>
     </div>

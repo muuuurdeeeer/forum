@@ -22,7 +22,7 @@ class AdminController extends Controller
         ]);
 
         if($request->only('role')){
-            $validated = $request->only('role') + $validated;
+            $validated = $request->only('role') + $validated; // чекбокс с ролью администратора
         }
 
         $user = User::create($validated);
@@ -36,10 +36,22 @@ class AdminController extends Controller
         ]);
     }
 
-    public function update($id) {
+    public function edit(User $user) {
+        return view('edit_user', compact('user'));
+    }
 
-        // Логика изменения пользователя
+    public function update(Request $request, $id) {
+        $validated = $request->validate([
+            'name' => 'required|max:100',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required',
+        ]);
 
+        if($request->only('role')){
+            $validated = $request->only('role') + $validated; // чекбокс с ролью администратора
+        }
+
+        User::findOrFail($id)->update($validated);
         return redirect(route('admin.show'));
     }
 

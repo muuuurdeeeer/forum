@@ -10,14 +10,14 @@
             @csrf
             <div class="form-group">
                 <label for="title" class="form-label">Тема поста</label>
-                <input name="title" id="title" class="form-control" placeholder="Напишите что-нибудь...">
+                <input name="title" id="title" class="form-control" value="{{ old('title') }}" placeholder="Напишите что-нибудь...">
                 @error('title')
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="body" class="form-label">Содержание</label>
-                <textarea name="body" id="body" class="form-control" rows="3"></textarea>
+                <textarea name="body" id="body" class="form-control" rows="3">{{ old('body') }}</textarea>
                 @error('body')
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
@@ -34,22 +34,23 @@
     @foreach($posts as $post)
             <div class="card col-6 offset-3 text-dark bg-light mb-3" >
                 <div class="card-header">
-                    {{\App\Models\Post::find($post->id)->user->name }}
-                    @if(\Illuminate\Support\Facades\Cache::has('is_online' . \App\Models\Post::find($post->id)->user->id))
+                    {{ $post->user->name }}
+                    @if(\Illuminate\Support\Facades\Cache::has('is_online' . $post->user->id))
                         <span class="text-success">Online</span>
                     @else
                         <span class="text-secondary">Offline</span>
                     @endif
                     <br>
-                    {{\App\Models\Post::find($post->id)->user->role }}
+                    {{ $post->user->role }}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title"> {{ $post->title }} </h5>
                     <p class="card-text"> {{ $post->body }} </p>
-                    <p class="card-text"> {{ $post->created_at->format('d/m/Y') }} {{ $post->created_at->format('H:i:s') }}</p>
+                    <p class="card-text"> {{ $post->created_at->format('d/m/Y') }} {{ $post->created_at->format('H:i') }}</p>
                 </div>
 
                 <div class="card-footer bg-light">
+                    <a class="link-secondary text-decoration-none" href="{{ url('/edit_post',$post) }}">Редактировать пост</a>
                     <form method="post" class="delete_form" action="{{ url('/delete_post',$post->id) }}">
                         {{ method_field('DELETE') }}
                         {{  csrf_field() }}

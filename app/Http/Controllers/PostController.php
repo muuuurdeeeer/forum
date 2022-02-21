@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -14,7 +13,8 @@ class PostController extends Controller
         //$posts = collect(Post::all()->toArray());
         //$posts = collect(Post::paginate(3)->toArray());
 
-        $posts = Post::paginate(3);
+        //$posts = Post::paginate(3);
+        $posts = Post::all();
         //dd($posts);
 
         return view('forum', compact('posts'));
@@ -39,10 +39,17 @@ class PostController extends Controller
         ]);
     }
 
-    public function udpate($id) {
+    public function edit(Post $post) {
+        return view('edit_post', compact('post'));
+    }
 
-        // логика редактирования
+    public function update(Request $request, $id) {
+        $validated = $request->validate([
+            'title' => 'required|max:50',
+            'body' => 'required|max:2000',
+        ]);
 
+        Post::findOrFail($id)->update($validated);
         return redirect(route('post.show'));
     }
 

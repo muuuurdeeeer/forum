@@ -61,6 +61,7 @@
                 <p>Время последней активности: {{ \Carbon\Carbon::parse($user->last_seen)->diffForHumans() }}</p>
             </div>
             <div class="card-footer bg-transparent">
+                <a class="link-secondary text-decoration-none" href="{{ url('/edit_user',$user) }}">Изменить данные</a>
                 <form method="post" class="delete_form" action="{{ url('/delete_user',$user['id']) }}">
                     {{ method_field('DELETE') }}
                     {{  csrf_field() }}

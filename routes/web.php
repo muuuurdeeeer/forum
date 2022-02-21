@@ -33,6 +33,7 @@ Route::name('admin.')->group(function () {
         ->middleware('can:view-admin-panel') //посредник с отображением панели в навигации
         ->middleware('auth')
         ->name('show');
+    Route::get('/edit_user/{user}', [AdminController::class, 'edit'])->name('edit');
     Route::post('/create_user', [AdminController::class, 'create'])->name('create');
     Route::patch('/update_user/{id}', [AdminController::class, 'update'])->name('update');
     Route::delete('/delete_user/{id}', [AdminController::class, 'delete'])->name('delete');
@@ -42,6 +43,7 @@ Route::name('admin.')->group(function () {
 // посты
 Route::name('post.')->group(function (){
     Route::get('/posts', [PostController::class, 'show'])->name('show');
+    Route::get('/edit_post/{post}', [PostController::class, 'edit'])->name('edit');
     Route::post('/create_post', [PostController::class, 'create'])->name('create');
     Route::patch('/update_post/{id}', [PostController::class, 'update'])->name('update');
     Route::delete('/delete_post/{id}', [PostController::class, 'delete'])->name('delete');
@@ -52,14 +54,14 @@ Route::name('user.')->group(function (){
         if(Auth::check()){
             return view('profile');
         }
-        return view('login');
+        return view('auth.login');
     })->name('login');
 
     Route::get('/registration', function (){
         if(Auth::check()){
             return view('profile');
         }
-        return view('registration');
+        return view('auth.registration');
     })->name('registration');
 
     Route::get('/logout', function (){
@@ -72,7 +74,7 @@ Route::name('user.')->group(function (){
             $posts = User::find(Auth::id())->posts;
             return view('profile', ['posts' => $posts]);
         }
-        return view('login');
+        return view('auth.login');
     })->name('profile');
 
     Route::post('/login', [AuthController::class, 'login']);
