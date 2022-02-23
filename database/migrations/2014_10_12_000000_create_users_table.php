@@ -23,6 +23,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamp('last_seen')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

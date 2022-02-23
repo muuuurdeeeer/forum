@@ -34,6 +34,7 @@ Route::name('admin.')->group(function () {
         ->middleware('auth')
         ->name('show');
     Route::get('/edit_user/{user}', [AdminController::class, 'edit'])->name('edit');
+    Route::get('/recovery_user/{id}', [AdminController::class, 'recovery'])->name('recovery');
     Route::post('/create_user', [AdminController::class, 'create'])->name('create');
     Route::patch('/update_user/{id}', [AdminController::class, 'update'])->name('update');
     Route::delete('/delete_user/{id}', [AdminController::class, 'delete'])->name('delete');

@@ -61,11 +61,30 @@
                 <p>Время последней активности: {{ \Carbon\Carbon::parse($user->last_seen)->diffForHumans() }}</p>
             </div>
             <div class="card-footer bg-transparent">
-                <a class="link-secondary text-decoration-none" href="{{ url('/edit_user',$user) }}">Изменить данные</a>
-                <form method="post" class="delete_form" action="{{ url('/delete_user',$user['id']) }}">
+                <a class="link-secondary text-decoration-none" href="{{ url('/edit_user', $user) }}">Изменить данные</a>
+                <form method="POST" class="delete_form" action="{{ url('/delete_user',$user['id']) }}">
                     {{ method_field('DELETE') }}
                     {{  csrf_field() }}
                     <button type="submit" class="btn btn-danger">{{ trans('Удалить пользователя') }}</button>
+                </form>
+            </div>
+        </div>
+    @endforeach
+
+    <!-- Вывод удаленных пользователей-->
+    @foreach($deletedUsers as $user)
+        <div class="card text-white bg-secondary col-4 offset-4 mb-3" >
+            <div class="card-header">
+                Роль: {{ $user->role }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-text"> Имя пользователя: {{ $user->name }} </h5>
+                <h5 class="card-title"> Email: {{ $user->email }} </h5>
+                <p class="card-text"> Дата удаления::  {{ $user->deleted_at }} </p>
+            </div>
+            <div class="card-footer bg-transparent text-dark">
+                <form method="GET" action="{{ url('/recovery_user', $user->id) }}">
+                    <button type="submit" class="btn btn-light">{{ trans('Восстановить пользователя') }}</button>
                 </form>
             </div>
         </div>

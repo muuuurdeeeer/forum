@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     public function show() {
-        //$users = collect(User::all())->toArray();
         $users = User::all();
-        return view('admin-panel', compact('users'));
+        $deletedUsers = User::onlyTrashed()->get();
+        return view('admin-panel', compact('users', 'deletedUsers'));
     }
 
     public function create(Request $request) {
@@ -58,5 +57,10 @@ class AdminController extends Controller
     public function delete($id) {
        User::destroy($id);
        return redirect(route('admin.show'));
+    }
+
+    public function recovery($id) {
+        User::onlyTrashed()->where('id', $id)->restore();
+        return redirect(route('admin.show'));
     }
 }

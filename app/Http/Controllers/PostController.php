@@ -8,15 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-
     public function show() {
-        //$posts = collect(Post::all()->toArray());
-        //$posts = collect(Post::paginate(3)->toArray());
-
-        //$posts = Post::paginate(3);
-        $posts = Post::all();
-        //dd($posts);
-
+        //$posts = Post::all()->sortByDesc('created_at');
+        $posts = Post::simplePaginate(5);
         return view('forum', compact('posts'));
     }
 
