@@ -30,8 +30,8 @@ Route::get('/', function () {
 // админ панель / пользователи
 Route::name('admin.')->group(function () {
     Route::get('/admin-panel', [AdminController::class, 'show'])
-        ->middleware('can:view-admin-panel') //посредник с отображением панели в навигации
-        ->middleware('auth')
+        //->middleware('can:view-admin-panel') //посредник с отображением панели в навигации
+        //->middleware('auth')
         ->name('show');
     Route::get('/edit_user/{user}', [AdminController::class, 'edit'])->name('edit');
     Route::get('/recovery_user/{id}', [AdminController::class, 'recovery'])->name('recovery');

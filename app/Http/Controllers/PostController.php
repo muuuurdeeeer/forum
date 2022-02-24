@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
     public function show() {
-        //$posts = Post::all()->sortByDesc('created_at');
-        $posts = Post::simplePaginate(5);
+        $posts = Post::orderByDesc('created_at')->paginate(5);
         return view('forum', compact('posts'));
     }
 
@@ -34,6 +34,8 @@ class PostController extends Controller
     }
 
     public function edit(Post $post) {
+        $post = Post::find($post->id);
+        Gate::authorize('update-user-post', [$post]);
         return view('edit_post', compact('post'));
     }
 
@@ -42,12 +44,15 @@ class PostController extends Controller
             'title' => 'required|max:50',
             'body' => 'required|max:2000',
         ]);
-
+        $post = Post::find($id);
+        Gate::authorize('update-user-post', [$post]);
         Post::findOrFail($id)->update($validated);
         return redirect(route('post.show'));
     }
 
     public function delete($id) {
+        $post = Post::find($id);
+        Gate::authorize('update-user-post', [$post]);
         Post::destroy($id);
         return redirect(route('post.show'));
     }

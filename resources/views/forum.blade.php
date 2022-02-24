@@ -42,20 +42,22 @@
                     @endif
                     <br>
                     {{ $post->user->role }}
+                    <br>
+                    @can('update-user-post', $post)
+                        <a class="link-secondary text-decoration-none" href="{{ url('/edit_post',$post) }}">Редактировать пост</a>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <h5 class="card-title"> {{ $post->title }} </h5>
                     <p class="card-text"> {{ $post->body }} </p>
                     <p class="card-text"> {{ $post->created_at->format('d/m/Y') }} {{ $post->created_at->format('H:i') }}</p>
-                </div>
-
-                <div class="card-footer bg-light">
-                    <a class="link-secondary text-decoration-none" href="{{ url('/edit_post',$post) }}">Редактировать пост</a>
-                    <form method="post" class="delete_form" action="{{ url('/delete_post',$post->id) }}">
-                        {{ method_field('DELETE') }}
-                        {{  csrf_field() }}
-                        <button type="submit" class="btn btn-danger">{{ trans('Удалить пост') }}</button>
-                    </form>
+                    @can('delete-user-post', $post)
+                        <form method="post" class="delete_form" action="{{ url('/delete_post',$post->id) }}">
+                            {{ method_field('DELETE') }}
+                            {{  csrf_field() }}
+                            <button type="submit" class="btn btn-danger">{{ trans('Удалить пост') }}</button>
+                        </form>
+                    @endcan
                 </div>
             </div>
     @endforeach

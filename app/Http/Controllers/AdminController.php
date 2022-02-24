@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
     public function show() {
+        Gate::authorize('view-admin-panel');
         $users = User::all();
         $deletedUsers = User::onlyTrashed()->get();
         return view('admin-panel', compact('users', 'deletedUsers'));
